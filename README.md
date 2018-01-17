@@ -1,2 +1,3 @@
-# ManagementSystem
-综合管理平台前端
+## ManagementSystem
+管理系统
+

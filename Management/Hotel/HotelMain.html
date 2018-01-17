@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>ModelHtml</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrapValidator.css" rel="stylesheet">
+    <link href="../../css/animate.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome.css" rel="stylesheet">
+    <link href="../../css/metisMenu.css" rel="stylesheet">
+    <link rel="stylesheet" href="HotelMain.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <[endif]-->
+</head>
+<body>
+ <!--BEGIN HEADER-->
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header" >
+            <a class="navbar-brand" href="javascript:;" >酒店管理系统</a>
+        </div>
+        <div class="container-fluid navbar-right">
+            <ul class="nav navbar-nav ">
+                <li class="dropdown ">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                        Name
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:;"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;个人信息</a></li>
+                        <li><a href="javascript:;"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp;修改密码</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript:;"><i class="glyphicon glyphicon-off"></i>&nbsp;&nbsp;登出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+ <!--END HEADER-->
+ <!--BEGIN MENU-->
+
+ <div class="clearfix">
+     <aside class="sidebar">
+         <nav class="sidebar-nav">
+             <ul class="metismenu" id="menu">
+                 <li>
+                     <a href="javascript:;" aria-expanded="true" target="ContentMain.html">
+                         <span class="sidebar-nav-item-icon fa fa-home fa-lg"></span>
+                         <span class="sidebar-nav-item">主页</span>
+                     </a>
+                 </li>
+                 <li>
+                     <a href="javascript:;" aria-expanded="true">
+                         <span class="sidebar-nav-item-icon fa fa-github fa-lg"></span>
+                         <span class="sidebar-nav-item">主菜单</span>
+                         <span class="glyphicon arrow"></span>
+                     </a>
+                     <ul aria-expanded="true">
+                         <li >
+                             <a href="javascript:;" target="Fork.html">
+                                 <span class="sidebar-nav-item-icon fa fa-code-fork"></span>
+                                 Fork
+                             </a>
+                         </li>
+                         <li >
+                             <a href="javascript:;" target="Star.html">
+                                 <span class="sidebar-nav-item-icon fa fa-star"></span>
+                                 Star
+                             </a>
+                         </li>
+                         <li id="Issues">
+                             <a href="javascript:;" target="Issues.html">
+                                 <span class="sidebar-nav-item-icon fa fa-exclamation-triangle"></span>
+                                 Issues
+                             </a>
+                         </li>
+                     </ul>
+                 </li>
+                 <li >
+                     <a href="javascript:;" aria-expanded="false">Menu 1 <span class="glyphicon arrow"></span></a>
+                     <ul aria-expanded="false">
+                         <li><a href="javascript:;" target="item 1.1.html">item 1.1</a></li>
+                         <li><a href="javascript:;" target="item 1.2.html">item 1.2</a></li>
+                         <li class="c">
+                             <a href="javascript:;" aria-expanded="false">Menu 1.3 <span class="fa plus-minus"></span></a>
+                             <ul aria-expanded="false">
+                                 <li class="active"><a href="javascript:;" target="item 1.3.1.html">item 1.3.1</a></li>
+                                 <li><a href="javascript:;" target="item 1.3.2.html">item 1.3.2</a></li>
+                                 <li><a href="javascript:;" target="item 1.3.3.html">item 1.3.3</a></li>
+                                 <li><a href="javascript:;" target="item 1.3.4.html">item 1.3.4</a></li>
+                             </ul>
+                         </li>
+                         <li><a href="javascript:;" target="item 1.4.html">item 1.4</a></li>
+                         <li>
+                             <a href="javascript:;" aria-expanded="false">Menu 1.5 <span class="fa plus-minus"></span></a>
+                             <ul aria-expanded="false">
+                                 <li class="collapse"><a href="javascript:;" target="item 1.5.1.html">item 1.5.1</a></li>
+                                 <li><a href="javascript:;" target="item 1.5.2.html">item 1.5.2</a></li>
+                                 <li><a href="javascript:;" target="item 1.5.3.html">item 1.5.3</a></li>
+                                 <li><a href="javascript:;" target="item 1.5.4.html">item 1.5.4</a></li>
+                             </ul>
+                         </li>
+                     </ul>
+                 </li>
+                 <li>
+                     <a href="javascript:;" aria-expanded="true">
+                         <span class="sidebar-nav-item-icon fa fa-cog fa-lg"></span>
+                         <span class="sidebar-nav-item">系统设置</span>
+                         <span class="glyphicon arrow"></span>
+                     </a>
+                     <ul aria-expanded="true">
+                         <li >
+                             <a href="javascript:;" target="Star.html">
+                                 <span class="sidebar-nav-item-icon fa fa-list-ul   "></span>
+                                 菜单管理
+                             </a>
+                         </li>
+                         <li >
+                             <a href="javascript:;" target="Fork.html">
+                                 <span class="sidebar-nav-item-icon fa fa-universal-access"></span>
+                                 角色管理
+                             </a>
+                         </li>
+                         <li>
+                             <a href="javascript:;" target="Issues.html">
+                                 <span class="sidebar-nav-item-icon fa fa-th"></span>
+                                 部门管理
+                             </a>
+                         </li>
+                         <li>
+                             <a href="javascript:;" target="Issues.html">
+                                 <span class="sidebar-nav-item-icon fa  fa-user-circle"></span>
+                                 人员管理
+                             </a>
+                         </li>
+                     </ul>
+                 </li>
+             </ul>
+         </nav>
+     </aside>
+ </div>
+
+ <!--END MENU-->
+ <!--BEGIN PAGECONTENT-->
+<div class="htmlcontent" >
+       <iframe style="width: 100%;height: 100%;background-color: #e7e7e7;border-width: 0 0 1px 0;border-color: #b5b5b5"  frameborder="no"  id="content" name = "content"></iframe>
+</div>
+ <!--END PAGECONTENT-->
+
+  <!--BEGIN BOTTOM-->
+<div class="bottom-sidebar" id="bottom">
+    <marquee class="center-vertical " scrollAmount=3   width=60% align="middle" vspace="2em"  onmouseover=this.stop() onmouseout=this.start() >滚动条---滚动条----滚动条</marquee>
+</div>
+ <!--END BOTTOM-->
+<script src="../../js/ManagementUrl.js"></script>
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/bootstrapValidator.js"></script>
+<script src="../../js/layer.js"></script>
+<script src="../../js/Socket.io/socket.io.js"></script>
+<script src="../../js/metisMenu.js"></script>
+<script src="../../js/Management.js"></script>
+<script src="HotelMain.js"></script>
+</body>
+</html>

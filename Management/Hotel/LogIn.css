@@ -1,0 +1,51 @@
+html,
+body {
+    font-family: 'Verdana', 'Arial';
+    color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+}
+
+.main {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: url(images/LogInBg.jpg) center top;
+    background-size: cover;
+}
+
+.content {
+    width: 800px;
+    height: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    overflow: hidden;
+    margin-top: -200px;
+    margin-left: -400px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    padding: 50px;
+    box-sizing: border-box;
+    /*不会把盒子撑开*/
+}
+
+.content::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
+    /*-1 可以当背景*/
+    -webkit-filter: blur(20px);
+    filter: blur(20px);
+    margin: -30px;  /*消除边缘透明*/
+    background: url(images/LogInBg.jpg) center top;
+    background-size: cover;
+    /*平铺*/
+    background-attachment: fixed;
+    /*位置固定*/
+}
