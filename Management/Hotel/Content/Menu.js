@@ -2,21 +2,123 @@ $(document).ready(function() {
     $("#btn_query").click();
 });
 
-$("#btn_query").click( function() {
-    var tabledata = [];
-    for (var i=0;i<1000;i++){
-        var datarow = {};
-        datarow.id = i;
-        datarow.name = "Item "+i;
-        datarow.price = "$"+i;
-        tabledata.push(datarow);
-    }
 
-    var params =  ['id','name','price','操作'];
-    var titles =  ['Item ID','Item Name!','Item Price!','操作'];
-    var columns = createCols (params,titles,false);
-    createBootstrapTable('#table',tabledata,columns,true,'#toolbar');
+$("#btn_query").click( function() {
+    var menu_name =$('#menumname').val();
+    var isdisabledSelect =$('#isdisabledSelect').val();
+    var UUID = uuid(8,16);
+    var reqdata = [];
+    var reqobj = {};
+    reqobj.menu_name = menu_name;
+    reqobj.isdisabledSelect = isdisabledSelect;
+    reqobj.function = 'query';
+    reqobj.uuid = UUID;
+    reqdata.push(reqobj);
+    var JsonData = JSON.stringify(reqdata);
+    ShowLoading();
+    socket.emit(MENU,JsonData);//发送服务器消息
+    socket.on('listen'+LOGIN,function (resdata) {//接受（监听）消息
+        if(UUID == DocJson(resdata,'uuid')){//判断是否是自己访问的UUID
+            if(DocJson(resdata,'Code') == '0'){//正确
+                var Message = DocJson(resdata,'Message');
+                var tabledata = eval('(' + Message + ')');
+                var params =  ['id','menu_id','menu_name','state','remarks','creat_time','last_update_time','操作'];
+                var titles =  ['ID','菜单ID','菜单名称','状态','备注','创建时间','最后修改时间','操作'];
+                var columns = createCols (params,titles,true);
+                createBootstrapTable('#table',tabledata,columns,true,'#toolbar');
+            }else{//错误
+                ShowAlert2(DocJson(resdata,'Message'),2);//提示错误
+            }
+        }
+        HideLoading();
+    });
 });
+
+$("#btn_add_menu_save").click( function() {
+
+});
+
+$('#add_menu_from').bootstrapValidator({
+    message: 'This value is not valid',
+    feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    fields: {
+        menu_id: {
+            validators: {
+                notEmpty: {
+                    message: '用户名不能为空。'
+                }
+            }
+        },
+        menu_name: {
+            validators: {
+                notEmpty: {
+                    message: '密码不能为空。'
+                }
+            }
+        }
+    }
+})
+    .on('success.form.bv', function(e) {
+        // Prevent form submission 防止表单提交
+        e.preventDefault();
+
+        // Get the form instance  获取表单实例
+        var $form = $(e.target);
+
+        // Get the BootstrapValidator instance  得到bootstrapvalidator实例
+        var bv = $form.data('bootstrapValidator');
+
+        var menu_id = $("#menu_id").val();
+        var menu_name = $("#menu_name").val();
+        var remarks = $("#remarks").val();
+        var UUID = uuid(8,16);
+        var reqdata = [];
+        var reqobj = {};
+        reqobj.menu_id = menu_id;
+        reqobj.menu_name = menu_name;
+        reqobj.remarks = remarks;
+        reqobj.function = 'add';
+        reqobj.uuid = UUID;
+        reqdata.push(reqobj);
+        var JsonData = JSON.stringify(reqdata);
+        socket.emit(MENU,JsonData);//发送服务器消息
+        socket.on('listen'+LOGIN,function (resdata) {//接受（监听）消息
+            if(UUID == DocJson(resdata,'uuid')) {//判断是否是自己访问的UUID
+                if (DocJson(resdata, 'Code') == '0') {//正确
+                    ShowAlert(DocJson(resdata,'Message'));
+                    $("#btn_modal_close").click();
+                }else{//错误
+                    ShowAlert2(DocJson(resdata,'Message'),2);//提示错误
+                }
+            }
+        });
+
+
+
+    });
+
+
+
+//批量删除
+$("#btn_deleteall").click( function() {
+    var row =$.map($("#table").bootstrapTable('getSelections'),function(row){return row;});
+    //row 是数组
+    if(row.length == 0){
+        ShowAlert2('请选择');
+        return;
+    }
+    var ids = [];
+    for (var i = 0;i<row.length;i++){
+        ids[i] = row[i].id;
+    }
+    ShowAlert2(ids.join(','));
+});
+
+
 
 //构成表头和操作
 function createCols (params,titles,hasCheckbox) {
@@ -39,7 +141,7 @@ function createCols (params,titles,hasCheckbox) {
     // obj.colspan = params.length;
     // arr.push(obj)
     // columns.push(arr);
-    var arr1 =[];
+    //var arr1 =[];
     for (var i=0;i<params.length;i++){
         var obj ={};
         obj.field = params[i];
@@ -54,9 +156,9 @@ function createCols (params,titles,hasCheckbox) {
                 return html;
             }
         }
-        arr1.push(obj);
+        columns.push(obj);
     }
-    columns.push(arr1);
+
     return columns;
 }
 
@@ -142,8 +244,8 @@ function createCols (params,titles,hasCheckbox) {
         };
     }
     // 传'#table'
-    createBootstrapTable = function (table,url,params,titles,hasCheckbox,toolbar) {
-        init(table,url,params,titles,hasCheckbox,toolbar);
+    createBootstrapTable = function (table,tabledata,columns,toolbar) {
+        init(table,tabledata,columns,toolbar);
     }
 })();
 //查看操作

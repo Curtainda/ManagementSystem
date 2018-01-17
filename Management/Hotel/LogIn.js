@@ -65,7 +65,7 @@ $('#LogInForm').bootstrapValidator({
             datarow.uuid = UUID;
             var reqdata = [];
             reqdata.push(datarow);
-            var JsonData = JSON.stringify(reqdata)
+            var JsonData = JSON.stringify(reqdata);
             // console.log("JSON--->"+JsonData);
 
             ShowLoading();

@@ -19,8 +19,12 @@ function ShowAlert(Text) {
 function ShowAlert2(Text,Icon) {
     if(Icon == null){
         layer.alert(Text);
-    }else{
-        layer.alert(Text,{icon: Icon});
+    }else {
+        if(Text == null){
+            layer.alert('未知错误',{icon: Icon});
+        }else{
+            layer.alert(Text,{icon: Icon});
+        }
     }
 }
 
