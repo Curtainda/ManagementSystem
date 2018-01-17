@@ -1,23 +1,72 @@
 $(document).ready(function() {
+    $("#btn_query").click();
+});
 
-    var reqdata = [];
+$("#btn_query").click( function() {
+    var tabledata = [];
     for (var i=0;i<1000;i++){
         var datarow = {};
         datarow.id = i;
         datarow.name = "Item "+i;
         datarow.price = "$"+i;
-        reqdata.push(datarow);
+        tabledata.push(datarow);
     }
-    createBootstrapTable('#table',
-        reqdata,
-        ['id','name','price'],
-        ['Item ID','Item Name!','Item Price!'],
-        true,
-        '#toolbar');
+
+    var params =  ['id','name','price','操作'];
+    var titles =  ['Item ID','Item Name!','Item Price!','操作'];
+    var columns = createCols (params,titles,false);
+    createBootstrapTable('#table',tabledata,columns,true,'#toolbar');
 });
 
+//构成表头和操作
+function createCols (params,titles,hasCheckbox) {
+    //params  数据库字段名称
+    //titles  表头
+    //是否有chek框
+    if(params.length!=titles.length)
+        return null;
+    var columns = [];
+    if(hasCheckbox){
+        var objc = {};
+        objc.checkbox = true;
+        columns.push(objc);
+    }
+    // var arr =[];
+    // var obj = {};
+    // obj.valign = 'middle';
+    // obj.align = 'center';
+    // obj.title = '合并单元格';
+    // obj.colspan = params.length;
+    // arr.push(obj)
+    // columns.push(arr);
+    var arr1 =[];
+    for (var i=0;i<params.length;i++){
+        var obj ={};
+        obj.field = params[i];
+        obj.title = titles[i];
+        obj.valign = 'middle';
+        obj.align = 'center';
+        if(obj.title == '操作'&&obj.field == '操作'){
+            obj.formatter=function (value,row,index) {
+                var html = '<a href="javascript:View(\''+ row.id + '\')">查看</a>';
+                html += '　<a href="javascript:Edit(\'' + row.id + '\')">编辑</a>';
+                html += '　<a href="javascript:Delete(\'' + row.name + '\')">删除</a>';
+                return html;
+            }
+        }
+        arr1.push(obj);
+    }
+    columns.push(arr1);
+    return columns;
+}
+
+
 (function () {
-    function init(table,Data,params,titles,hasCheckbox,toolbar) {
+    function init(table,tabledata,columns,toolbar) {
+        //table 表ID
+        //tabledata 表数据
+        //columns 构成表头和操作
+        //toolbar 工具divid
         $(table).bootstrapTable({
             // url: url,                           //请求后台的URL（*）
             // method: 'post',                     //请求方式（*）
@@ -40,31 +89,48 @@ $(document).ready(function() {
             clickToSelect: true,                //是否启用点击选中行
             //height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
             uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
-            showToggle:false,                    //是否显示详细视图和列表视图的切换按钮
+            showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                  //是否显示父子表
-            columns: createCols(params,titles,hasCheckbox),
-            data: Data
+            showExport: true,                     //是否显示导出
+            exportDataType: "all",              //basic', 'all', 'selected'.当前页、所有数据还是选中数据。
+            exportTypes:['excel'],
+            columns: columns,
+            data: tabledata,
+            rowStyle: function (row, index) {
+                //这里有5个取值代表5中颜色['active', 'success', 'info', 'warning', 'danger'];
+                var rowclass = {};
+                var strclass = "";
+                // if (row.id < 5) {
+                //     strclass = 'success';//还有一个active
+                // }
+                rowclass.classes = strclass;
+                return rowclass
+            },
+
+            //注册加载子表的事件。注意下这里的三个参数！
+            onExpandRow: function (index, row, $detail) {
+                fatherson(index, row, $detail,params,titles,Checkbox);
+            }
         });
     }
-    function createCols(params,titles,hasCheckbox) {
-        if(params.length!=titles.length)
-            return null;
-        var arr = [];
-        if(hasCheckbox)
-        {
-            var objc = {};
-            objc.checkbox = true;
-            arr.push(objc);
-        }
-        for(var i = 0;i<params.length;i++)
-        {
-            var obj = {};
-            obj.field = params[i];
-            obj.title = titles[i];
-            arr.push(obj);
-        }
-        return arr;
+
+    function fatherson(index, fatherrow, $detail,params,titles,hasCheckbox) {
+        var fatherid = fatherrow.id;
+        var cur_table = $detail.html('<table></table>').find('table');
+        $(cur_table).bootstrapTable({
+            data: getfaehrtsondata(fatherid),
+            clickToSelect: true,
+            detailView: false,//父子表
+            uniqueId: "id",
+            pageSize: 10,
+            pageList: [10, 25],
+            columns: createCols(params,titles,hasCheckbox),
+            // //无线循环取子表，直到子表里面没有记录
+            // onExpandRow: function (index, row, $Subdetail) {
+            //     oInit.InitSubTable(index, row, $Subdetail);
+            // }
+        });
     }
 
     //可发送给服务端的参数：limit->pageSize,offset->pageNumber,search->searchText,sort->sortName(字段),order->sortOrder('asc'或'desc')
@@ -79,7 +145,24 @@ $(document).ready(function() {
     createBootstrapTable = function (table,url,params,titles,hasCheckbox,toolbar) {
         init(table,url,params,titles,hasCheckbox,toolbar);
     }
-
 })();
+//查看操作
+function View(Id) {
+    alert("查看操作，ID：" + Id);
+}
+//编辑操作
+function Edit(Id){
+    alert("编辑操作，ID：" + Id);
+}
+//删除操作
+function Delete(Id) {
+    if (confirm("确定删除ID：" + Id + "吗？"))
+    {
+        alert("执行删除操作");
+    }
+}
+
+
+
 
 
