@@ -28,6 +28,7 @@ function ShowAlert2(Text,Icon) {
     }
 }
 
+
 /**
  * localStorage  缓存通用方法
  * @param key
@@ -205,3 +206,32 @@ function DocJson(strdoc,strname,num) {
     return res;
 }
 
+/**
+ * 重置表单
+ * @param Fromid
+ * @constructor
+ */
+function ResetFrom(Fromid) {
+    $(Fromid)[0].reset();
+    $(Fromid).data('bootstrapValidator').destroy();
+    $(Fromid).data('bootstrapValidator', null);
+}
+
+/**
+ * 表单内控件不可用
+ * @param Fromid
+ * @constructor
+ */
+function FromDisabled(Fromid) {
+    $(Fromid).find('input,textarea,select').disable = true;
+
+}
+
+/**
+ * 表单内控件可用
+ * @param Fromid
+ * @constructor
+ */
+function FromAvailable(Fromid) {
+    $(Fromid).find('input,textarea,select')/*.not('这里代表需要改的元素的查找')*/.disable = false;
+}
