@@ -246,13 +246,37 @@ function formValidator() {
                     }
                     HideLoading();
                 });
-            }else if (Fromtype == 'view'){
+            }else if (Fromtype == 'edt'){
+                var ID = $("#ID").val();
                 var menu_id = $("#menu_id").val();
                 var menu_name = $("#menu_name").val();
-                var remarks = $("#remarks").val();
                 var state = $("#state").val();
-            }else if (Fromtype == 'edt'){
-                Edit(Id);
+                var remarks = $("#remarks").val();
+                var UUID = uuid(8,16);
+                var reqdata = [];
+                var reqobj = {};
+                reqobj.ID = ID;
+                reqobj.menu_id = menu_id;
+                reqobj.menu_name = menu_name;
+                reqobj.state = state;
+                reqobj.remarks = remarks;
+                reqobj.function = 'edt';
+                reqobj.uuid = UUID;
+                reqdata.push(reqobj);
+                var JsonData = JSON.stringify(reqdata);
+                socket.emit(MENU,JsonData);//发送服务器消息
+                socket.on('listen'+MENU,function (resdata) {//接受（监听）消息
+                    if(UUID == DocJson(resdata,'uuid')) {//判断是否是自己访问的UUID
+                        if (DocJson(resdata, 'Code') == '0') {//正确
+                            ShowAlert(DocJson(resdata,'Message'));
+                            $("#btn_modal_close").click();
+                            $("#btn_query").click();
+                        }else{//错误
+                            ShowAlert2(DocJson(resdata,'Message'),2);//提示错误
+                        }
+                    }
+                    HideLoading();
+                });
             }
         });
 }
@@ -260,34 +284,51 @@ function formValidator() {
 
 //添加操作
 function Add() {
-    ResetFrom('#add_menu_from');
-    formValidator();
+    //下面4列顺序不能变！！！！！！！！！！！！
     FromAvailable('#add_menu_from');//表单控件可用
-    $("#state").val("0");
-    $('#add_menu_from').find('#state')/*.not('这里代表需要改的元素的查找')*/.attr("disabled", "disabled");
+    $("#state").attr("disabled", true);
+    ResetFrom('#add_menu_from');//重置表单
+    formValidator();
     Fromtype = 'add';
 }
 //查看操作
 function View(index) {
-    ResetFrom('#add_menu_from');//重置表单
+    //下面4列顺序不能变！！！！！！！！！！！！
     FromDisabled('#add_menu_from');//表单控件不可用
+    ResetFrom('#add_menu_from');//重置表单
+    formValidator();
+    $("#btn_add_menu_save").attr("disabled", true);
     var TableRow = $("#table").bootstrapTable('getData');//获取表格的所有内容行
     var row = TableRow[index];
+    Fromtype = 'view';
 
+    $("#ID").val(row.ID);
+    $("#menu_id").val(row.menu_id);
+    $("#menu_name").val(row.menu_name);
+    $("#remarks").val(row.remarks);
+    $("#state").val(row.state);
 }
 //编辑操作
 function Edit(index){
-    ResetFrom('#add_menu_from');//重置表单
+    //下面4列顺序不能变！！！！！！！！！！！！
     FromAvailable('#add_menu_from');//表单控件可用
+    ResetFrom('#add_menu_from');//重置表单
     formValidator();
     var TableRow = $("#table").bootstrapTable('getData');//获取表格的所有内容行
     var row = TableRow[index];
+    Fromtype = 'edt';
+
+    $("#ID").val(row.ID);
+    $("#menu_id").val(row.menu_id);
+    $("#menu_name").val(row.menu_name);
+    $("#remarks").val(row.remarks);
+    $("#state").val(row.state);
 }
 //删除操作
 function Delete(index) {
     var TableRow = $("#table").bootstrapTable('getData');//获取表格的所有内容行
     var row = TableRow[index];
-    layer.msg("要删除："+row.menu_name+" 吗?", {
+    layer.confirm("要删除："+row.menu_name+" 吗?", {
         time: 0 ,//不自动关闭
         btn: ['是', '否'],
         yes: function (index) {
@@ -330,7 +371,7 @@ function BatchDelete() {
         ids[i] = row[i].ID;
         names[i] = row[i].menu_name;
     }
-    layer.msg("要删除："+names.join(',')+" 吗?", {
+    layer.confirm("要删除："+names.join(',')+" 吗?", {
         time: 0 ,//不自动关闭
         btn: ['是', '否'],
         yes: function (index) {

@@ -223,7 +223,7 @@ function ResetFrom(Fromid) {
  * @constructor
  */
 function FromDisabled(Fromid) {
-    $(Fromid).find('input,textarea,select').disable = true;
+    $(Fromid).find('input,textarea,select').attr("disabled", true);
 
 }
 
@@ -233,5 +233,5 @@ function FromDisabled(Fromid) {
  * @constructor
  */
 function FromAvailable(Fromid) {
-    $(Fromid).find('input,textarea,select')/*.not('这里代表需要改的元素的查找')*/.disable = false;
+    $(Fromid).find('input,textarea,select')/*.not('这里代表需要改的元素的查找')*/.removeAttr("disabled");//可用
 }

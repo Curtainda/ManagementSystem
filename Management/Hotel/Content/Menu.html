@@ -74,6 +74,12 @@
 
                 <div class="modal-body">
                     <form id="add_menu_from" class="form-horizontal container" >
+                        <div class="form-group hidden" >
+                    <label class="col-sm-1 control-label" for="ID">ID</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" id="ID" name="menu_id" type="text" placeholder="ID"/>
+                    </div>
+                        </div>
                         <div class="form-group" >
                     <label class="col-sm-1 control-label" for="menu_id">菜单ID</label>
                     <div class="col-sm-4">
@@ -92,12 +98,11 @@
                         <input class="form-control" id="remarks" name="remarks" type="text" placeholder="备注"/>
                     </div>
                         </div>
-                        <div class="form-group" >
+                        <div class="form-group" id="state_select">
                     <label class="col-sm-1 control-label" for="state">状态</label>
                     <div class="col-sm-4">
                             <select id="state" class="form-control">
-                                <option value="">全部</option>
-                                <option value="0">可用</option>
+                                <option value="0" selected>可用</option>
                                 <option value="1">不可用</option>
                             </select>
                     </div>
